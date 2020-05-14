@@ -38,7 +38,7 @@ Git (optional but recommended)
 
 ## Running Automated Tests
 
-tests are under __tests__
+tests are under ``__tests__``
 
 ```
 npm run test

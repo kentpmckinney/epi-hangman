@@ -26,7 +26,6 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
 const mapStateToProps = state => {
