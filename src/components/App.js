@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Drawing from './Drawing/Drawing';
+import Form from './Form/Form';
+import Display from './Display/Display';
 import './App.css';
 
 class App extends React.Component {
@@ -9,20 +12,17 @@ class App extends React.Component {
     props.dispatch({ type: 'SET_SECRET_WORD', secretWord: 'abracadabra' })
   }
 
-  handleGuessClick = event => {
-    this.props.dispatch({ type: 'SUBMIT_LETTER', letterGuessed: document.getElementById('input').value });
+  handleLetterSubmit = event => {
+    console.log('here')
+    this.props.dispatch({ type: 'SUBMIT_LETTER', letterGuessed: event.target.input.letter });
   }
 
   render() {
     return (
       <div className="App">
-        <div>
-          {`Secret Word: ${this.props.revealedWord}`}
-          <br />
-          {`Body Parts Remaining: ${this.props.bodyPartsRemaining ? this.props.bodyPartsRemaining.join(', ') : ''}`}
-        </div>
-        <input id='input'></input>
-        <button onClick={this.handleGuessClick}>Guess</button>
+        <Drawing bodyParts={['head', 'torso', 'left arm', 'right arm', 'left leg', 'right leg']} />
+        <Display revealedWord={this.props.revealedWord} />
+        <Form onLetterSubmitted={this.handleLetterSubmit} />
       </div>
     );
   }
