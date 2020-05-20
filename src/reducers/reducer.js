@@ -5,12 +5,16 @@ export default (state = {}, action) => {
       newState.secretWord = action.secretWord;
       newState.letterGuessed = '';
       newState.revealedWord = action.secretWord.replace(/.{1}/g, '-');
-      newState.bodyPartsRemaining = ['head', 'torso', 'left arm', 'right arm', 'left hand', 'right hand', 'left leg', 'right leg', 'left foot', 'right foot'];
+      newState.bodyParts = [];
+      newState.gameOver = false;
+      newState.hasWon = false;
       return newState;
     case 'SUBMIT_LETTER':
       let newState2 = {};
       newState2.letterGuessed = action.letterGuessed;
       newState2.secretWord = state.secretWord;
+      newState2.hasWon = state.hasWon;
+      newState2.gameOver = state.gameOver;
       let oldRevealedWord = state.revealedWord;
       oldRevealedWord = oldRevealedWord.split('');
       let newRevealedWord = [];
@@ -28,16 +32,38 @@ export default (state = {}, action) => {
         }
       });
       newState2.revealedWord = newRevealedWord.join('');
-      newState2.bodyPartsRemaining = state.bodyPartsRemaining;
+      if (newState2.revealedWord === state.secretWord) { newState2.hasWon = true; }
+      newState2.bodyParts = state.bodyParts;
       const isLetterInSecretWord = state.secretWord.includes(action.letterGuessed);
+      console.log(isLetterInSecretWord)
       if (isLetterInSecretWord) {
         // secret word contains the letter
         return newState2;
       } else {
         // secret word does NOT contain the letter
-        let newBodyPartsRemaining = newState2.bodyPartsRemaining;
-        newBodyPartsRemaining.pop();
-        newState2.bodyPartsRemaining = newBodyPartsRemaining;
+        console.log(newState2.bodyParts[newState2.bodyParts.length - 1])
+        switch (newState2.bodyParts[newState2.bodyParts.length - 1]) {
+          case 'left leg':
+            newState2.bodyParts.push('right leg');
+            newState2.gameOver = true;
+            break;
+          case 'right arm':
+            newState2.bodyParts.push('left leg');
+            break;
+          case 'left arm':
+            newState2.bodyParts.push('right arm');
+            break;
+          case 'torso':
+            newState2.bodyParts.push('left arm');
+            break;
+          case 'head':
+            newState2.bodyParts.push('torso');
+            break;
+          default:
+            newState2.bodyParts.push('head');
+            break;
+        }
+
         return newState2;
       }
     default:

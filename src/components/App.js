@@ -7,24 +7,30 @@ import './App.css';
 
 class App extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { secretWord: '', letterGuessed: '', revealedWord: '', bodyPartsRemaining: '' }
+    super(props)
     props.dispatch({ type: 'SET_SECRET_WORD', secretWord: 'abracadabra' })
   }
 
   handleLetterSubmit = event => {
-    console.log('here')
-    this.props.dispatch({ type: 'SUBMIT_LETTER', letterGuessed: event.target.input.letter });
+    event.preventDefault();
+    this.props.dispatch({ type: 'SUBMIT_LETTER', letterGuessed: event.target.input.value });
+    event.target.input.value = '';
   }
 
   render() {
-    return (
-      <div className="App">
-        <Drawing bodyParts={['head', 'torso', 'left arm', 'right arm', 'left leg', 'right leg']} />
-        <Display revealedWord={this.props.revealedWord} />
-        <Form onLetterSubmitted={this.handleLetterSubmit} />
-      </div>
-    );
+    if (this.props.secretWord) {
+      console.log(this.props)
+      return (
+        <div className="App">
+          <Drawing bodyParts={this.props.bodyParts} />
+          <Display revealedWord={this.props.revealedWord} />
+          <Form onLetterSubmitted={this.handleLetterSubmit} />
+        </div>
+      );
+    }
+    else {
+      return <div className="App"></div>
+    }
   }
 }
 
@@ -33,7 +39,9 @@ const mapStateToProps = state => {
     secretWord: state.secretWord,
     letterGuessed: state.letterGuessed,
     revealedWord: state.revealedWord,
-    bodyPartsRemaining: state.bodyPartsRemaining
+    bodyParts: state.bodyParts,
+    gameOver: state.gameOver,
+    hasWon: state.hasWon
   }
 }
 App = connect(mapStateToProps)(App);
