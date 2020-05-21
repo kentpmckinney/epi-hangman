@@ -19,11 +19,11 @@ class App extends React.Component {
 
   render() {
     if (this.props.secretWord) {
-      console.log(this.props)
       return (
         <div className="App">
           <Drawing bodyParts={this.props.bodyParts} />
           <Display revealedWord={this.props.revealedWord} />
+          <br />
           <Form onLetterSubmitted={this.handleLetterSubmit} />
         </div>
       );

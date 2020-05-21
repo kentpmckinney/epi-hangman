@@ -1,3 +1,9 @@
 .secret-word {
   font-size: 22pt;
 }
+
+.letter {
+  border: 1px solid lightgray;
+  margin: 2px;
+  padding: 5px;
+}
